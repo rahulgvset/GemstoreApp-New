@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Order } from "@/lib/types";
 import { readLastOrder } from "@/lib/orders";
-import { PRODUCTS } from "@/data/products";
+import { useCart } from "@/context/CartContext";
 import { formatPrice } from "@/lib/format";
 
 export default function ConfirmationPage() {
   const [order, setOrder] = useState<Order | null | undefined>(undefined);
+  const { catalog } = useCart();
 
   useEffect(() => {
     setOrder(readLastOrder());
@@ -52,7 +53,7 @@ export default function ConfirmationPage() {
         <h2 className="font-display text-lg text-[var(--color-ink)]">Order Details</h2>
         <div className="mt-4 flex flex-col gap-3">
           {order.lines.map((line) => {
-            const product = PRODUCTS.find((p) => p.id === line.productId);
+            const product = catalog.find((p) => p.id === line.productId);
             if (!product) return null;
             return (
               <div key={line.productId} className="flex justify-between text-sm text-[var(--color-ink)]/70">

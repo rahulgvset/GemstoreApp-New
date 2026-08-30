@@ -1,0 +1,67 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model ZodiacSign {
+  id           String              @id
+  name         String
+  symbol       String
+  dateRange    String
+  element      String
+  rulingPlanet String
+  traits       String
+  products     ProductZodiacSign[]
+}
+
+model Gemstone {
+  id         String            @id
+  name       String
+  color      String
+  hex        String
+  chakra     String
+  properties String
+  products   ProductGemstone[]
+}
+
+model Product {
+  id               String              @id @default(cuid())
+  slug             String              @unique
+  name             String
+  price            Float
+  compareAtPrice   Float?
+  shortDescription String
+  description      String
+  beadSizeMm       Int                 @default(8)
+  stock            Int                 @default(0)
+  featured         Boolean             @default(false)
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+  gemstones        ProductGemstone[]
+  zodiacSigns      ProductZodiacSign[]
+}
+
+model ProductGemstone {
+  productId  String
+  gemstoneId String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  gemstone   Gemstone @relation(fields: [gemstoneId], references: [id], onDelete: Cascade)
+
+  @@id([productId, gemstoneId])
+}
+
+model ProductZodiacSign {
+  productId String
+  signId    String
+  product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  sign      ZodiacSign @relation(fields: [signId], references: [id], onDelete: Cascade)
+
+  @@id([productId, signId])
+}

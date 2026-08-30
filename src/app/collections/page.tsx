@@ -1,12 +1,22 @@
 import Link from "next/link";
 import { ZODIAC_SIGNS } from "@/data/zodiac";
-import { getProductsBySign } from "@/data/products";
+import { getAllProducts } from "@/lib/catalog";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Collections | Celestine Stones",
 };
 
-export default function CollectionsPage() {
+export default async function CollectionsPage() {
+  const products = await getAllProducts();
+  const countBySign = new Map<string, number>();
+  for (const product of products) {
+    for (const signId of product.zodiacSignIds) {
+      countBySign.set(signId, (countBySign.get(signId) ?? 0) + 1);
+    }
+  }
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <h1 className="font-display text-3xl text-[var(--color-ink)] sm:text-4xl">
@@ -19,7 +29,7 @@ export default function CollectionsPage() {
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {ZODIAC_SIGNS.map((sign) => {
-          const count = getProductsBySign(sign.id).length;
+          const count = countBySign.get(sign.id) ?? 0;
           return (
             <Link
               key={sign.id}

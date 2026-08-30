@@ -1,14 +1,17 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { PRODUCTS, getProductBySlug } from "@/data/products";
+import { getAllProducts, getProductBySlug } from "@/lib/catalog";
 import { GEMSTONE_MAP } from "@/data/gemstones";
 import { ZODIAC_MAP } from "@/data/zodiac";
 import { formatPrice } from "@/lib/format";
 import BraceletVisual from "@/components/BraceletVisual";
 import AddToCartForm from "@/components/AddToCartForm";
 
-export function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ slug: p.slug }));
+export const dynamic = "force-dynamic";
+
+export async function generateStaticParams() {
+  const products = await getAllProducts();
+  return products.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({
@@ -17,7 +20,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
   return { title: product ? `${product.name} | Celestine Stones` : "Product" };
 }
 
@@ -27,14 +30,14 @@ export default async function ProductPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
   }
 
-  const sign = ZODIAC_MAP[product.zodiacSignIds[0]];
-  const stones = product.gemstoneIds.map((id) => GEMSTONE_MAP[id]);
+  const sign = product.zodiacSignIds[0] ? ZODIAC_MAP[product.zodiacSignIds[0]] : undefined;
+  const stones = product.gemstoneIds.map((id) => GEMSTONE_MAP[id]).filter(Boolean);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
@@ -42,10 +45,14 @@ export default async function ProductPage({
         <Link href="/collections" className="hover:text-[var(--color-gold)]">
           Collections
         </Link>{" "}
-        /{" "}
-        <Link href={`/collections/${sign.id}`} className="hover:text-[var(--color-gold)]">
-          {sign.name}
-        </Link>{" "}
+        {sign && (
+          <>
+            /{" "}
+            <Link href={`/collections/${sign.id}`} className="hover:text-[var(--color-gold)]">
+              {sign.name}
+            </Link>{" "}
+          </>
+        )}
         / <span>{product.name}</span>
       </nav>
 
@@ -56,9 +63,11 @@ export default async function ProductPage({
 
         <div className="flex flex-col gap-6">
           <div>
-            <span className="text-xs font-medium uppercase tracking-wide text-[var(--color-gold)]">
-              {sign.symbol} {sign.name} Collection
-            </span>
+            {sign && (
+              <span className="text-xs font-medium uppercase tracking-wide text-[var(--color-gold)]">
+                {sign.symbol} {sign.name} Collection
+              </span>
+            )}
             <h1 className="mt-1 font-display text-3xl text-[var(--color-ink)] sm:text-4xl">
               {product.name}
             </h1>

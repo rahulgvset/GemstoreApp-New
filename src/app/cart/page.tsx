@@ -2,19 +2,23 @@
 
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import { PRODUCTS } from "@/data/products";
+import { Product } from "@/lib/types";
 import { formatPrice, calculateShipping } from "@/lib/format";
 import BraceletVisual from "@/components/BraceletVisual";
 
 export default function CartPage() {
-  const { lines, updateQuantity, removeFromCart, subtotal } = useCart();
+  const { lines, catalog, catalogLoaded, updateQuantity, removeFromCart, subtotal } = useCart();
 
   const items = lines
     .map((line) => {
-      const product = PRODUCTS.find((p) => p.id === line.productId);
+      const product = catalog.find((p) => p.id === line.productId);
       return product ? { product, quantity: line.quantity } : null;
     })
-    .filter((x): x is { product: (typeof PRODUCTS)[number]; quantity: number } => x !== null);
+    .filter((x): x is { product: Product; quantity: number } => x !== null);
+
+  if (lines.length > 0 && !catalogLoaded) {
+    return <div className="px-4 py-24 text-center text-sm text-[var(--color-ink)]/50">Loading your cart…</div>;
+  }
 
   if (items.length === 0) {
     return (

@@ -9,13 +9,15 @@ import {
   useState,
   ReactNode,
 } from "react";
-import { CartLine } from "@/lib/types";
-import { PRODUCTS } from "@/data/products";
+import { CartLine, Product } from "@/lib/types";
 
 const STORAGE_KEY = "gemstore-cart";
 
 interface CartContextValue {
   lines: CartLine[];
+  catalog: Product[];
+  catalogLoaded: boolean;
+  getProduct: (productId: string) => Product | undefined;
   addToCart: (productId: string, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
@@ -29,6 +31,8 @@ const CartContext = createContext<CartContextValue | undefined>(undefined);
 export function CartProvider({ children }: { children: ReactNode }) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [catalog, setCatalog] = useState<Product[]>([]);
+  const [catalogLoaded, setCatalogLoaded] = useState(false);
 
   useEffect(() => {
     try {
@@ -42,6 +46,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setHydrated(true);
     }
   }, []);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data: Product[]) => setCatalog(data))
+      .catch(() => setCatalog([]))
+      .finally(() => setCatalogLoaded(true));
+  }, []);
+
+  const getProduct = useCallback(
+    (productId: string) => catalog.find((p) => p.id === productId),
+    [catalog]
+  );
 
   useEffect(() => {
     if (!hydrated) return;
@@ -87,15 +104,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const subtotal = useMemo(
     () =>
       lines.reduce((sum, l) => {
-        const product = PRODUCTS.find((p) => p.id === l.productId);
+        const product = catalog.find((p) => p.id === l.productId);
         return product ? sum + product.price * l.quantity : sum;
       }, 0),
-    [lines]
+    [lines, catalog]
   );
 
   const value = useMemo(
     () => ({
       lines,
+      catalog,
+      catalogLoaded,
+      getProduct,
       addToCart,
       removeFromCart,
       updateQuantity,
@@ -103,7 +123,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
       itemCount,
       subtotal,
     }),
-    [lines, addToCart, removeFromCart, updateQuantity, clearCart, itemCount, subtotal]
+    [
+      lines,
+      catalog,
+      catalogLoaded,
+      getProduct,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      itemCount,
+      subtotal,
+    ]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

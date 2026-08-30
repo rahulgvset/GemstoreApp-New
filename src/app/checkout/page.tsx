@@ -4,10 +4,9 @@ import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { PRODUCTS } from "@/data/products";
 import { formatPrice, calculateShipping } from "@/lib/format";
 import { buildOrder, saveLastOrder } from "@/lib/orders";
-import { CustomerInfo } from "@/lib/types";
+import { CustomerInfo, Product } from "@/lib/types";
 
 const initialForm: CustomerInfo = {
   fullName: "",
@@ -19,20 +18,24 @@ const initialForm: CustomerInfo = {
 };
 
 export default function CheckoutPage() {
-  const { lines, subtotal, clearCart } = useCart();
+  const { lines, catalog, catalogLoaded, subtotal, clearCart } = useCart();
   const router = useRouter();
   const [form, setForm] = useState<CustomerInfo>(initialForm);
   const [submitting, setSubmitting] = useState(false);
 
   const items = lines
     .map((line) => {
-      const product = PRODUCTS.find((p) => p.id === line.productId);
+      const product = catalog.find((p) => p.id === line.productId);
       return product ? { product, quantity: line.quantity } : null;
     })
-    .filter((x): x is { product: (typeof PRODUCTS)[number]; quantity: number } => x !== null);
+    .filter((x): x is { product: Product; quantity: number } => x !== null);
 
   const shipping = calculateShipping(subtotal);
   const total = subtotal + shipping;
+
+  if (lines.length > 0 && !catalogLoaded) {
+    return <div className="px-4 py-24 text-center text-sm text-[var(--color-ink)]/50">Loading checkout…</div>;
+  }
 
   if (items.length === 0) {
     return (

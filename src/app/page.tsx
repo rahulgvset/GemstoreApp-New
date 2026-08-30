@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { ZODIAC_SIGNS } from "@/data/zodiac";
-import { getFeaturedProducts } from "@/data/products";
+import { getFeaturedProducts } from "@/lib/catalog";
 import ProductCard from "@/components/ProductCard";
 
-export default function Home() {
-  const featured = getFeaturedProducts();
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const featured = await getFeaturedProducts();
 
   return (
     <div>

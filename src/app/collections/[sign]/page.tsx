@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
 import { ZODIAC_SIGNS, ZODIAC_MAP } from "@/data/zodiac";
-import { getProductsBySign } from "@/data/products";
+import { getProductsBySign } from "@/lib/catalog";
 import { ZodiacSignId } from "@/lib/types";
 import ProductCard from "@/components/ProductCard";
+
+export const dynamic = "force-dynamic";
 
 export function generateStaticParams() {
   return ZODIAC_SIGNS.map((sign) => ({ sign: sign.id }));
@@ -30,7 +32,7 @@ export default async function ZodiacCollectionPage({
     notFound();
   }
 
-  const products = getProductsBySign(info.id);
+  const products = await getProductsBySign(info.id);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">

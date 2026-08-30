@@ -1,4 +1,5 @@
 import { Product, ZodiacSignId } from "@/lib/types";
+import { slugify } from "@/lib/slug";
 
 interface ProductSeed {
   sign: ZodiacSignId;
@@ -35,10 +36,6 @@ const seeds: ProductSeed[] = [
   { sign: "pisces", signName: "Pisces", stones: ["aquamarine", "amethyst"], stoneNames: ["Aquamarine", "Amethyst"], variant: "Classic", price: 37 },
   { sign: "pisces", signName: "Pisces", stones: ["aquamarine"], stoneNames: ["Aquamarine"], variant: "Aura", price: 33 },
 ];
-
-function slugify(text: string): string {
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
-}
 
 export const PRODUCTS: Product[] = seeds.map((seed, index) => {
   const name = `${seed.signName} ${seed.variant} Bracelet`;
