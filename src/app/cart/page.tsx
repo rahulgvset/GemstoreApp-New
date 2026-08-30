@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { Product } from "@/lib/types";
 import { formatPrice, calculateShipping } from "@/lib/format";
+import { trackEvent } from "@/lib/track";
 import BraceletVisual from "@/components/BraceletVisual";
 
 export default function CartPage() {
@@ -112,6 +113,7 @@ export default function CartPage() {
           </div>
           <Link
             href="/checkout"
+            onClick={() => trackEvent("checkout_clicked")}
             className="mt-6 block rounded-full bg-[var(--color-plum)] px-6 py-3 text-center text-sm font-semibold text-white transition hover:bg-[var(--color-plum-dark)]"
           >
             Proceed to Checkout

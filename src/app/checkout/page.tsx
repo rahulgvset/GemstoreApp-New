@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { formatPrice, calculateShipping } from "@/lib/format";
 import { buildOrder, saveLastOrder } from "@/lib/orders";
+import { trackEvent } from "@/lib/track";
 import { CustomerInfo, Product } from "@/lib/types";
 
 const initialForm: CustomerInfo = {
@@ -61,6 +62,7 @@ export default function CheckoutPage() {
     setSubmitting(true);
     const order = buildOrder(lines, form, subtotal, shipping);
     saveLastOrder(order);
+    trackEvent("checkout_completed");
     clearCart();
     router.push("/checkout/confirmation");
   };

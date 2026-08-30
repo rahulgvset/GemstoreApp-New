@@ -65,3 +65,28 @@ model ProductZodiacSign {
 
   @@id([productId, signId])
 }
+
+model Visitor {
+  id        String   @id
+  firstSeen DateTime @default(now())
+  lastSeen  DateTime @updatedAt
+  events    Event[]
+}
+
+model Event {
+  id        String   @id @default(cuid())
+  visitorId String
+  visitor   Visitor  @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+  type      String // "page_view" | "checkout_clicked" | "checkout_completed"
+  path      String?
+  country   String?
+  region    String?
+  city      String?
+  ip        String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([visitorId, type])
+  @@index([type, createdAt])
+}

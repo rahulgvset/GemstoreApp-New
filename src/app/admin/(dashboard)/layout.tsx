@@ -10,9 +10,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="min-h-[80vh] bg-[var(--color-cream)]">
       <div className="border-b border-[var(--color-border)] bg-[var(--color-plum-dark)] text-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:px-6">
-          <Link href="/admin" className="font-display text-lg">
-            ✦ Admin Panel
-          </Link>
+          <div className="flex items-center gap-6">
+            <Link href="/admin" className="font-display text-lg">
+              ✦ Admin Panel
+            </Link>
+            <nav className="flex items-center gap-4 text-sm">
+              <Link href="/admin" className="hover:text-[var(--color-gold-light)]">
+                Products
+              </Link>
+              <Link href="/admin/analytics" className="hover:text-[var(--color-gold-light)]">
+                Analytics
+              </Link>
+            </nav>
+          </div>
           <form action={logoutAction}>
             <button
               type="submit"
