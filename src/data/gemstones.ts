@@ -1,0 +1,140 @@
+import { Gemstone } from "@/lib/types";
+
+export const GEMSTONES: Gemstone[] = [
+  {
+    id: "red-jasper",
+    name: "Red Jasper",
+    color: "Brick Red",
+    hex: "#9c3b2e",
+    chakra: "Root",
+    properties: ["Grounding", "Courage", "Vitality"],
+  },
+  {
+    id: "rose-quartz",
+    name: "Rose Quartz",
+    color: "Soft Pink",
+    hex: "#e8b4bc",
+    chakra: "Heart",
+    properties: ["Love", "Compassion", "Emotional healing"],
+  },
+  {
+    id: "citrine",
+    name: "Citrine",
+    color: "Golden Yellow",
+    hex: "#e0a831",
+    chakra: "Solar Plexus",
+    properties: ["Abundance", "Confidence", "Joy"],
+  },
+  {
+    id: "moonstone",
+    name: "Moonstone",
+    color: "Pearly White",
+    hex: "#e6e2da",
+    chakra: "Sacral",
+    properties: ["Intuition", "New beginnings", "Balance"],
+  },
+  {
+    id: "tigers-eye",
+    name: "Tiger's Eye",
+    color: "Golden Brown",
+    hex: "#a9741c",
+    chakra: "Solar Plexus",
+    properties: ["Strength", "Focus", "Protection"],
+  },
+  {
+    id: "amethyst",
+    name: "Amethyst",
+    color: "Deep Purple",
+    hex: "#6f4a8e",
+    chakra: "Crown",
+    properties: ["Clarity", "Calm", "Spiritual growth"],
+  },
+  {
+    id: "lapis-lazuli",
+    name: "Lapis Lazuli",
+    color: "Royal Blue",
+    hex: "#2a4a8a",
+    chakra: "Third Eye",
+    properties: ["Wisdom", "Truth", "Insight"],
+  },
+  {
+    id: "garnet",
+    name: "Garnet",
+    color: "Deep Red",
+    hex: "#7a1f2b",
+    chakra: "Root",
+    properties: ["Passion", "Energy", "Commitment"],
+  },
+  {
+    id: "black-onyx",
+    name: "Black Onyx",
+    color: "Jet Black",
+    hex: "#1c1c1e",
+    chakra: "Root",
+    properties: ["Protection", "Willpower", "Grounding"],
+  },
+  {
+    id: "green-aventurine",
+    name: "Green Aventurine",
+    color: "Emerald Green",
+    hex: "#4c8c5a",
+    chakra: "Heart",
+    properties: ["Luck", "Growth", "Opportunity"],
+  },
+  {
+    id: "labradorite",
+    name: "Labradorite",
+    color: "Iridescent Grey-Blue",
+    hex: "#5c6b73",
+    chakra: "Third Eye",
+    properties: ["Transformation", "Magic", "Intuition"],
+  },
+  {
+    id: "sodalite",
+    name: "Sodalite",
+    color: "Indigo Blue",
+    hex: "#2e3f6e",
+    chakra: "Throat",
+    properties: ["Communication", "Logic", "Inner peace"],
+  },
+  {
+    id: "carnelian",
+    name: "Carnelian",
+    color: "Warm Orange",
+    hex: "#c1502e",
+    chakra: "Sacral",
+    properties: ["Creativity", "Motivation", "Vitality"],
+  },
+  {
+    id: "smoky-quartz",
+    name: "Smoky Quartz",
+    color: "Warm Brown",
+    hex: "#6b5645",
+    chakra: "Root",
+    properties: ["Stability", "Detox", "Protection"],
+  },
+  {
+    id: "aquamarine",
+    name: "Aquamarine",
+    color: "Pale Blue-Green",
+    hex: "#8fc4c0",
+    chakra: "Throat",
+    properties: ["Calm", "Clarity", "Courage"],
+  },
+  {
+    id: "clear-quartz",
+    name: "Clear Quartz",
+    color: "Crystal Clear",
+    hex: "#dfe6e8",
+    chakra: "Crown",
+    properties: ["Amplification", "Clarity", "Balance"],
+  },
+];
+
+export const GEMSTONE_MAP: Record<string, Gemstone> = GEMSTONES.reduce(
+  (acc, stone) => {
+    acc[stone.id] = stone;
+    return acc;
+  },
+  {} as Record<string, Gemstone>
+);

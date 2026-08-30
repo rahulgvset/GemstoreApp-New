@@ -1,0 +1,120 @@
+import { ZodiacInfo, ZodiacSignId } from "@/lib/types";
+
+export const ZODIAC_SIGNS: ZodiacInfo[] = [
+  {
+    id: "aries",
+    name: "Aries",
+    symbol: "♈",
+    dateRange: "Mar 21 - Apr 19",
+    element: "Fire",
+    rulingPlanet: "Mars",
+    traits: ["Bold", "Energetic", "Determined"],
+  },
+  {
+    id: "taurus",
+    name: "Taurus",
+    symbol: "♉",
+    dateRange: "Apr 20 - May 20",
+    element: "Earth",
+    rulingPlanet: "Venus",
+    traits: ["Grounded", "Patient", "Loyal"],
+  },
+  {
+    id: "gemini",
+    name: "Gemini",
+    symbol: "♊",
+    dateRange: "May 21 - Jun 20",
+    element: "Air",
+    rulingPlanet: "Mercury",
+    traits: ["Curious", "Adaptable", "Expressive"],
+  },
+  {
+    id: "cancer",
+    name: "Cancer",
+    symbol: "♋",
+    dateRange: "Jun 21 - Jul 22",
+    element: "Water",
+    rulingPlanet: "Moon",
+    traits: ["Intuitive", "Nurturing", "Protective"],
+  },
+  {
+    id: "leo",
+    name: "Leo",
+    symbol: "♌",
+    dateRange: "Jul 23 - Aug 22",
+    element: "Fire",
+    rulingPlanet: "Sun",
+    traits: ["Confident", "Generous", "Radiant"],
+  },
+  {
+    id: "virgo",
+    name: "Virgo",
+    symbol: "♍",
+    dateRange: "Aug 23 - Sep 22",
+    element: "Earth",
+    rulingPlanet: "Mercury",
+    traits: ["Analytical", "Devoted", "Precise"],
+  },
+  {
+    id: "libra",
+    name: "Libra",
+    symbol: "♎",
+    dateRange: "Sep 23 - Oct 22",
+    element: "Air",
+    rulingPlanet: "Venus",
+    traits: ["Balanced", "Charming", "Fair-minded"],
+  },
+  {
+    id: "scorpio",
+    name: "Scorpio",
+    symbol: "♏",
+    dateRange: "Oct 23 - Nov 21",
+    element: "Water",
+    rulingPlanet: "Pluto",
+    traits: ["Passionate", "Resilient", "Magnetic"],
+  },
+  {
+    id: "sagittarius",
+    name: "Sagittarius",
+    symbol: "♐",
+    dateRange: "Nov 22 - Dec 21",
+    element: "Fire",
+    rulingPlanet: "Jupiter",
+    traits: ["Adventurous", "Optimistic", "Free-spirited"],
+  },
+  {
+    id: "capricorn",
+    name: "Capricorn",
+    symbol: "♑",
+    dateRange: "Dec 22 - Jan 19",
+    element: "Earth",
+    rulingPlanet: "Saturn",
+    traits: ["Disciplined", "Ambitious", "Wise"],
+  },
+  {
+    id: "aquarius",
+    name: "Aquarius",
+    symbol: "♒",
+    dateRange: "Jan 20 - Feb 18",
+    element: "Air",
+    rulingPlanet: "Uranus",
+    traits: ["Visionary", "Independent", "Inventive"],
+  },
+  {
+    id: "pisces",
+    name: "Pisces",
+    symbol: "♓",
+    dateRange: "Feb 19 - Mar 20",
+    element: "Water",
+    rulingPlanet: "Neptune",
+    traits: ["Dreamy", "Compassionate", "Artistic"],
+  },
+];
+
+export const ZODIAC_MAP: Record<ZodiacSignId, ZodiacInfo> = ZODIAC_SIGNS.reduce(
+  (acc, sign) => {
+    acc[sign.id] = sign;
+    return acc;
+  },
+  {} as Record<ZodiacSignId, ZodiacInfo>
+);
